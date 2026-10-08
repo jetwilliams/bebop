@@ -18,6 +18,7 @@ This repo is documentation, templates and a few small shell scripts. There is no
 
 - [Diagram](#diagram)
 - [Background](#background)
+- [Set it up with one prompt](#set-it-up-with-one-prompt)
 - [Quick start](#quick-start)
 - [How a request flows](#how-a-request-flows)
 - [Security model](#security-model)
@@ -54,6 +55,14 @@ tool. The idea is written up at [jetworks.io/posts/context-pods](https://jetwork
 The whole studio lives **inside** the pod: the manager agent runs at the pod's root (where the rules, memory and handover
 file are), and each project agent runs inside its own project folder (`projects/<name>/`). Same folder, any model.
 
+## Set it up with one prompt
+
+Clone this repo on your always-on machine, start your coding agent inside the folder, and paste the prompt in
+[SETUP_PROMPT.md](SETUP_PROMPT.md). It checks what you already have (tools, an existing memory folder or context
+pod, projects), interviews you (your manager's name and personality, approvals, backups), shows a plan, then sets
+everything up with you, step by step. You type the bot token yourself into a hidden prompt. Your answers are saved,
+so you can run it again any time to update or repair the setup.
+
 ## Quick start
 
 This is the short version. [docs/setup.md](docs/setup.md) has every step.
@@ -63,7 +72,8 @@ This is the short version. [docs/setup.md](docs/setup.md) has every step.
    backup model.
 3. **Create the context pod**: a folder for the studio (for example `~/studio`), with a copy of
    [templates/HANDOVER.md](templates/HANDOVER.md) as `AGENTS.md` and [templates/MANAGER.md](templates/MANAGER.md)
-   as the manager's role file.
+   as the manager's role file. **Name your manager and give it a personality:** `MANAGER.md` has a
+   `{{MANAGER_NAME}}` field and a short personality section to fill in.
 4. **Create a Telegram bot** with BotFather. Store the token with the hidden prompt in
    [scripts/set-secret.sh](scripts/set-secret.sh), never by pasting it into a chat.
 5. **Start the manager**:
@@ -127,6 +137,7 @@ The full explanation is in [docs/security.md](docs/security.md). In short:
 ```
 bebop/
 ├── README.md               overview (this file)
+├── SETUP_PROMPT.md         paste-in prompt: your agent sets everything up with you
 ├── LICENSE                 MIT
 ├── docs/
 │   ├── architecture.md     reference: every component
@@ -136,7 +147,7 @@ bebop/
 │   ├── security.md         explanation: the security model
 │   └── model-swap.md       how-to: hand over to another model
 ├── templates/
-│   ├── MANAGER.md          role file for the manager agent
+│   ├── MANAGER.md          role file for the manager agent (name + personality + rules)
 │   ├── PROJECT.md          role file for a project agent
 │   ├── HANDOVER.md         handover file skeleton (save as AGENTS.md)
 │   └── memory/             MEMORY.md index + example memories
