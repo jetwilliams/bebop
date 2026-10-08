@@ -1,0 +1,13 @@
+# systemd user timer: runs bebop-watchdog.service 1 minute after boot, then every 5 minutes.
+# Install instructions are in bebop-watchdog.service.
+
+[Unit]
+Description=Run the Bebop watchdog every 5 minutes
+
+[Timer]
+OnBootSec=1min
+OnUnitActiveSec=5min
+Persistent=true
+
+[Install]
+WantedBy=timers.target

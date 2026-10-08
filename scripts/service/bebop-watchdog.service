@@ -1,0 +1,21 @@
+# systemd user unit: one run of the Bebop watchdog. Started every 5 minutes by bebop-watchdog.timer.
+#
+# 1. Replace ${SCRIPTS_DIR} with the absolute path to the folder holding watchdog.sh, studio-up.sh and _common.sh.
+# 2. Install both files:
+#      mkdir -p ~/.config/systemd/user
+#      cp bebop-watchdog.service bebop-watchdog.timer ~/.config/systemd/user/
+#      systemctl --user daemon-reload
+#      systemctl --user enable --now bebop-watchdog.timer
+# 3. Let user services run without a login session (needed on a headless box):
+#      sudo loginctl enable-linger "$USER"
+# 4. Check: systemctl --user list-timers ; journalctl --user -u bebop-watchdog
+#
+# %h is systemd's own placeholder for your home folder; leave it as it is.
+
+[Unit]
+Description=Bebop watchdog (restart the manager agent if it is down)
+
+[Service]
+Type=oneshot
+Environment=STUDIO_CONFIG=%h/.config/bebop/studio.env
+ExecStart=/bin/bash ${SCRIPTS_DIR}/watchdog.sh

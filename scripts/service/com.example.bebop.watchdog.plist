@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<!--
+  macOS LaunchAgent: run the Bebop watchdog every 5 minutes.
+
+  1. Replace the placeholders:
+       ${LABEL}        e.g. com.yourname.bebop.watchdog (also rename this file to ${LABEL}.plist)
+       ${SCRIPTS_DIR}  absolute path to a folder holding watchdog.sh, studio-up.sh and _common.sh.
+                       Keep it OUT of ~/Desktop, ~/Documents and ~/Downloads (launchd cannot read those).
+       ${HOME}         your home folder, written out in full (launchd does not expand variables)
+  2. Install:
+       cp ${LABEL}.plist ~/Library/LaunchAgents/
+       launchctl bootstrap gui/$(id -u) ~/Library/LaunchAgents/${LABEL}.plist
+  3. Check:   launchctl print gui/$(id -u)/${LABEL}
+     Remove:  launchctl bootout gui/$(id -u)/${LABEL}
+-->
+<plist version="1.0">
+<dict>
+  <key>Label</key>
+  <string>${LABEL}</string>
+
+  <key>ProgramArguments</key>
+  <array>
+    <string>/bin/bash</string>
+    <string>${SCRIPTS_DIR}/watchdog.sh</string>
+  </array>
+
+  <key>EnvironmentVariables</key>
+  <dict>
+    <key>STUDIO_CONFIG</key>
+    <string>${HOME}/.config/bebop/studio.env</string>
+  </dict>
+
+  <key>StartInterval</key>
+  <integer>300</integer>
+
+  <key>RunAtLoad</key>
+  <true/>
+
+  <key>StandardOutPath</key>
+  <string>${HOME}/.local/state/bebop/watchdog.launchd.log</string>
+  <key>StandardErrorPath</key>
+  <string>${HOME}/.local/state/bebop/watchdog.launchd.log</string>
+</dict>
+</plist>
